@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\WebStorage.Application\WebStorage.Application.csproj" />
+    <ProjectReference Include="..\WebStorage.Domain\WebStorage.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
