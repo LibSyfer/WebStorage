@@ -74,7 +74,7 @@ public sealed class AuthService(
         await dbContext.SaveChangesAsync(cancellationToken);
         
         var authResponse = await BuildAuthResponseAsync(user);
-        return new AuthSessionResult(authResponse, rawRefreshToken);
+        return new AuthSessionResult(authResponse, rawRefreshToken, newSession.ExpiresAtUtc);
     }
 
     public async Task<bool> LogoutAsync(string refreshToken, CancellationToken cancellationToken = default)
