@@ -8,7 +8,7 @@ namespace WebStorage.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
+[AllowAnonymous]
 public sealed class AuthController(
     IAuthService authService,
     IOptions<AuthSessionOptions> authSessionOptions,
@@ -17,7 +17,6 @@ public sealed class AuthController(
     private readonly AuthSessionOptions _authSessionOptions = authSessionOptions.Value;
     private readonly bool _isDevelopment = hostEnvironment.IsDevelopment();
 
-    [AllowAnonymous]
     [HttpPost("register")]
     public async Task<ActionResult<AuthResponse>> Register([FromBody] RegisterRequest request, CancellationToken cancellationToken)
     {
@@ -30,7 +29,6 @@ public sealed class AuthController(
         return Ok(result.Auth);
     }
 
-    [AllowAnonymous]
     [HttpPost("login")]
     public async Task<ActionResult<AuthResponse>> Login([FromBody] LoginRequest request, CancellationToken cancellationToken)
     {
@@ -43,6 +41,7 @@ public sealed class AuthController(
         return Ok(result.Auth);
     }
 
+    [HttpPost("refresh")]
     public async Task<ActionResult<AuthResponse>> Refresh(CancellationToken cancellationToken)
     {
         if (!Request.Cookies.TryGetValue(_authSessionOptions.CookieName, out var refreshToken))
