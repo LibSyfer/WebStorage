@@ -24,7 +24,7 @@ public static class DbSeeder
 
     private static async Task ExecuteMigrationsAsync(IServiceProvider sp, CancellationToken cancellationToken)
     {
-        var logger = sp.GetRequiredService<LoggerFactory>().CreateLogger("MigrationExecutor");
+        var logger = sp.GetRequiredService<ILoggerFactory>().CreateLogger("MigrationExecutor");
 
         logger.LogInformation("Starting database migrations...");
 
@@ -35,7 +35,7 @@ public static class DbSeeder
 
     private static async Task SeedRolesAsync(IServiceProvider sp, CancellationToken cancellationTokens)
     {
-        var logger = sp.GetRequiredService<LoggerFactory>().CreateLogger("RolesSeeder");
+        var logger = sp.GetRequiredService<ILoggerFactory>().CreateLogger("RolesSeeder");
 
         var roleManager = sp.GetRequiredService<RoleManager<IdentityRole>>();
         foreach (var role in Roles)
@@ -53,7 +53,7 @@ public static class DbSeeder
 
     private static async Task SeedAdminAsync(IServiceProvider sp, IConfiguration configuration, CancellationToken cancellationToken)
     {
-        var logger = sp.GetRequiredService<LoggerFactory>().CreateLogger("AdminSeeder");
+        var logger = sp.GetRequiredService<ILoggerFactory>().CreateLogger("AdminSeeder");
 
         var adminEmail = configuration["Seed:AdminEmail"];
         var adminPassword = configuration["Seed:AdminPassword"];
