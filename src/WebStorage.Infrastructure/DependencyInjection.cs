@@ -19,8 +19,8 @@ public static class DependencyInjection
 
         services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
 
-        var dbConnectionString = configuration.GetConnectionString("DefaultConnection")
-            ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+        var dbConnectionString = configuration.GetConnectionString("Default")
+            ?? throw new InvalidOperationException("Connection string 'Default' not found.");
 
         services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(dbConnectionString));
