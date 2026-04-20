@@ -6,7 +6,7 @@ using WebStorage.Infrastructure.Options;
 
 namespace WebStorage.Api.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/auth")]
 [ApiController]
 [AllowAnonymous]
 public sealed class AuthController(
