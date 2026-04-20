@@ -124,7 +124,7 @@ public sealed class AuthService(
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        return new AuthSessionResult(authResponse, rawRefreshToken);
+        return new AuthSessionResult(authResponse, rawRefreshToken, session.ExpiresAtUtc);
     }
 
     private RefreshSession CreateSession(string userId, out string rawRefreshToken)
