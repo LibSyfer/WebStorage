@@ -2,11 +2,15 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WebStorage.Application.Abstractions;
 using WebStorage.Application.Auth;
+using WebStorage.Application.Storage;
 using WebStorage.Infrastructure.Auth;
+using WebStorage.Infrastructure.Data.Repositories;
 using WebStorage.Infrastructure.Data;
 using WebStorage.Infrastructure.Identity;
 using WebStorage.Infrastructure.Options;
+using WebStorage.Infrastructure.Storage;
 
 namespace WebStorage.Infrastructure;
 
@@ -16,6 +20,7 @@ public static class DependencyInjection
     {
         services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
         services.Configure<AuthSessionOptions>(configuration.GetSection(AuthSessionOptions.SectionName));
+        services.Configure<FileStorageOptions>(configuration.GetSection(FileStorageOptions.SectionName));
 
         services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
 
@@ -30,6 +35,12 @@ public static class DependencyInjection
             .AddEntityFrameworkStores<AppDbContext>();
 
         services.AddScoped<IAuthService, AuthService>();
+
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IFileEntryRepository, FileEntryRepository>();
+        services.AddScoped<IUserStorageRepository, UserStorageRepository>();
+
+        services.AddSingleton<IFileStorage, LocalFileStorage>();
 
         return services;
     }
