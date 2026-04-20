@@ -59,6 +59,17 @@ public sealed class AuthController(
         return Ok(result.Auth);
     }
 
+    [HttpPost("logout")]
+    public async Task<ActionResult<AuthResponse>> Logout(CancellationToken cancellationToken)
+    {
+        if (Request.Cookies.TryGetValue(_authSessionOptions.CookieName, out var refreshToken))
+            await authService.LogoutAsync(refreshToken, cancellationToken);
+
+        ClearRefreshCookie();
+
+        return NoContent();
+    }
+
     private void SetRefreshCookie(string refreshToken, DateTime expiresAtUtc)
     {
         Response.Cookies.Append(_authSessionOptions.CookieName, refreshToken, new CookieOptions
