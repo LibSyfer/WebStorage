@@ -2,8 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WebStorage.Application.Abstractions;
 using WebStorage.Application.Auth;
 using WebStorage.Infrastructure.Auth;
+using WebStorage.Infrastructure.Data.Repositories;
 using WebStorage.Infrastructure.Data;
 using WebStorage.Infrastructure.Identity;
 using WebStorage.Infrastructure.Options;
@@ -30,6 +32,12 @@ public static class DependencyInjection
             .AddEntityFrameworkStores<AppDbContext>();
 
         services.AddScoped<IAuthService, AuthService>();
+
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IFileEntryRepository, FileEntryRepository>();
+        services.AddScoped<IUserStorageRepository, UserStorageRepository>();
+
+        services.AddSingleton<IFileStorage, LocalFileStorage>();
 
         return services;
     }
