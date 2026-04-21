@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/WebStorage.Api/WebStorage.Api.csproj" Id="3063e974-cc58-4a74-b490-68debf9dccb5" />
+    <Project Path="src/WebStorage.Application/WebStorage.Application.csproj" Id="a841cb20-44ed-4935-8e0b-625e2c321112" />
+    <Project Path="src/WebStorage.Domain/WebStorage.Domain.csproj" Id="457f3de8-bde2-45f7-8189-919d90304dcb" />
+    <Project Path="src/WebStorage.Infrastructure/WebStorage.Infrastructure.csproj" Id="3dfe5925-7fcb-416d-9379-e1cc6ba624e6" />
+  </Folder>
+</Solution>
