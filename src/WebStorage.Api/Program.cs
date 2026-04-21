@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using WebStorage.Api;
 using WebStorage.Api.ExceptionHandling;
-using WebStorage.Api.Filters;
 using WebStorage.Application;
 using WebStorage.Application.Auth;
 using WebStorage.Infrastructure;
@@ -13,10 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
-builder.Services.AddControllers(options =>
-{
-    options.Filters.Add<LogActionFilter>();
-});
+builder.Services.AddControllers();
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddOpenApi();
