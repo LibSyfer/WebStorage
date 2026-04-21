@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using WebStorage.Api;
+using WebStorage.Api.ExceptionHandling;
 using WebStorage.Api.Filters;
 using WebStorage.Application;
 using WebStorage.Application.Auth;
@@ -16,6 +17,8 @@ builder.Services.AddControllers(options =>
 {
     options.Filters.Add<LogActionFilter>();
 });
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddOpenApi();
 
 builder.ConfigureAuthentication();
@@ -27,6 +30,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 
+app.UseExceptionHandler();
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();

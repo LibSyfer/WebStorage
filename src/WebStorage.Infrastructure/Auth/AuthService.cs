@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -13,6 +14,7 @@ using WebStorage.Infrastructure.Options;
 namespace WebStorage.Infrastructure.Auth;
 
 public sealed class AuthService(
+    ILogger<AuthService> logger,
     UserManager<ApplicationUser> userManager,
     IJwtTokenGenerator jwtTokenGenerator,
     AppDbContext dbContext,
@@ -20,11 +22,11 @@ public sealed class AuthService(
 {
     private readonly AuthSessionOptions _sessionOptions = sessionOptions.Value;
 
-    public async Task<AuthSessionResult?> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken = default)
+    public async Task<AuthSessionResult> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken = default)
     {
         var existedUser = await userManager.FindByEmailAsync(request.Email);
         if (existedUser is not null)
-            return null;
+            throw new EmailAlreadyRegisteredException();
 
         var user = new ApplicationUser
         {
@@ -33,39 +35,45 @@ public sealed class AuthService(
         };
         var result = await userManager.CreateAsync(user, request.Password);
         if (!result.Succeeded)
-            return null;
+        {
+            logger.LogWarning(
+                "User registration failed for {Email}: {Errors}",
+                request.Email,
+                string.Join("; ", result.Errors.Select(e => $"{e.Code}:{e.Description}")));
+            throw new RegistrationFailedException();
+        }
 
         await userManager.AddToRoleAsync(user, RoleNames.User);
 
         return await BuildAuthSessionResultAsync(user, cancellationToken);
     }
 
-    public async Task<AuthSessionResult?> LoginAsync(LoginRequest request, CancellationToken cancellationToken = default)
+    public async Task<AuthSessionResult> LoginAsync(LoginRequest request, CancellationToken cancellationToken = default)
     {
         var user = await userManager.Users.FirstOrDefaultAsync(u => u.Email == request.Email, cancellationToken);
         if (user is null)
-            return null;
+            throw new InvalidCredentialsException();
 
         var valid = await userManager.CheckPasswordAsync(user, request.Password);
         if (!valid)
-            return null;
+            throw new InvalidCredentialsException();
 
         return await BuildAuthSessionResultAsync(user, cancellationToken);
     }
 
-    public async Task<AuthSessionResult?> RefreshAsync(string refreshToken, CancellationToken cancellationToken = default)
+    public async Task<AuthSessionResult> RefreshAsync(string refreshToken, CancellationToken cancellationToken = default)
     {
         var tokenHash = HashToken(refreshToken);
         var session = await dbContext.RefreshSessions.FirstOrDefaultAsync(s => s.TokenHash == tokenHash, cancellationToken);
         if (session is null)
-            return null;
+            throw new InvalidRefreshTokenException();
 
         if (session.RevokedAtUtc is not null || session.ExpiresAtUtc <= DateTime.UtcNow)
-            return null;
+            throw new InvalidRefreshTokenException();
 
         var user = await userManager.FindByIdAsync(session.UserId);
         if (user is null)
-            return null;
+            throw new InvalidRefreshTokenException();
 
         var newSession = CreateSession(user.Id, out var rawRefreshToken);
         session.RevokedAtUtc = DateTime.UtcNow;

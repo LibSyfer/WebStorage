@@ -38,7 +38,7 @@ public sealed class LocalFileStorage(IOptions<FileStorageOptions> options) : IFi
         var full = Path.GetFullPath(combined);
 
         if (!full.StartsWith(_rootPath, StringComparison.OrdinalIgnoreCase))
-            throw new InvalidOperationException("Invalid storage key.");
+            throw new StorageKeyInvalidException();
 
         return full;
     }

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using WebStorage.Application.Files;
+using WebStorage.Application.Storage;
 
 namespace WebStorage.Api.Controllers;
 

@@ -1,8 +1,7 @@
 using WebStorage.Application.Abstractions;
-using WebStorage.Application.Storage;
 using WebStorage.Domain.Entities;
 
-namespace WebStorage.Application.Files;
+namespace WebStorage.Application.Storage;
 
 public sealed class FileService(
     IFileStorage fileStorage,
@@ -25,7 +24,7 @@ public sealed class FileService(
 
         var userStorage = await userStorages.GetOrCreateAsync(userId, DefaultMaxBytes, cancellationToken);
         if (!userStorage.TryReserve(contentLength))
-            throw new InvalidOperationException("Storage quota exceeded.");
+            throw new StorageQuotaExceededException();
 
         var fileId = Guid.NewGuid();
         var storageKey = BuildStorageKey(userId, fileId, fileName);
@@ -67,7 +66,7 @@ public sealed class FileService(
     public async Task<(Stream Stream, string FileName)> OpenReadAsync(Guid fileId, string userId, CancellationToken cancellationToken = default)
     {
         var entry = await fileEntries.GetByIdForUserAsync(fileId, userId, cancellationToken);
-        if (entry is null) throw new InvalidOperationException("File not found.");
+        if (entry is null) throw new StoredFileNotFoundException(fileId);
 
         var stream = await fileStorage.OpenReadAsync(entry.StorageKey, cancellationToken);
         return (stream, entry.FileName);
