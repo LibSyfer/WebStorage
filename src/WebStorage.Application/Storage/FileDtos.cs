@@ -1,6 +1,6 @@
 using WebStorage.Domain.Entities;
 
-namespace WebStorage.Application.Files;
+namespace WebStorage.Application.Storage;
 
 public sealed record FileEntryDto(
     Guid Id,

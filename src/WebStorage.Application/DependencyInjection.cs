@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using WebStorage.Application.Files;
+using WebStorage.Application.Storage;
 using WebStorage.Application.StorageAccounts;
 
 namespace WebStorage.Application;

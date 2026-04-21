@@ -1,4 +1,4 @@
-namespace WebStorage.Application.Files;
+namespace WebStorage.Application.Storage;
 
 public interface IFileService
 {
