@@ -15,7 +15,7 @@ public sealed class StorageKeyInvalidException()
 public sealed class StorageQuotaExceededException()
     : AppErrorException("Not enough free storage to upload this file.")
 {
-    public override int StatusCode => 409;
+    public override int StatusCode => 413;
 
     public override string Title => "Storage quota exceeded";
 
