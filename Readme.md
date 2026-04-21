@@ -40,9 +40,9 @@
 
 | Документ | Описание |
 |----------|---------|
-| **[API.md](./API.md)** | 📋 Полное описание всех API endpoints с примерами |
-| **[AUTHENTICATION.md](./AUTHENTICATION.md)** | 🔐 Подробный гайд по JWT аутентификации и безопасности |
-| **[SETUP.md](./SETUP.md)** | ⚙️ Инструкция по установке, конфигурации и запуску |
+| **[API.md](./docs/API.md)** | 📋 Полное описание всех API endpoints с примерами |
+| **[AUTHENTICATION.md](./docs/AUTHENTICATION.md)** | 🔐 Подробный гайд по JWT аутентификации и безопасности |
+| **[SETUP.md](./docs/SETUP.md)** | ⚙️ Инструкция по установке, конфигурации и запуску |
 
 ---
 
@@ -76,7 +76,7 @@ dotnet run
 # Swagger: https://localhost:7001/swagger/ui (если включен)
 ```
 
-Подробнее см. [SETUP.md](./SETUP.md) 📖
+Подробнее см. [SETUP.md](./docs/SETUP.md) 📖
 
 ---
 
@@ -219,7 +219,7 @@ curl -X GET https://localhost:7001/api/storage/me \
 # }
 ```
 
-Больше примеров см. в [API.md](./API.md) 📖
+Больше примеров см. в [API.md](./docs/API.md) 📖
 
 ---
 
@@ -246,7 +246,7 @@ curl -X GET https://localhost:7001/api/storage/me \
 - ✅ **Глобальная обработка ошибок** (не утечка информации)
 - ✅ **Валидация входных данных**
 
-Подробнее см. [AUTHENTICATION.md](./AUTHENTICATION.md) 🔐
+Подробнее см. [AUTHENTICATION.md](./docs/AUTHENTICATION.md) 🔐
 
 ---
 
@@ -305,7 +305,7 @@ az webapp deployment source config-zip --resource-group mygroup \
   --src app.zip
 ```
 
-Подробнее см. [SETUP.md](./SETUP.md) ⚙️
+Подробнее см. [SETUP.md](./docs/SETUP.md) ⚙️
 
 ---
 
@@ -326,7 +326,7 @@ dotnet test --filter Category=Integration
 ### cURL примеры для ручного тестирования
 
 Используйте готовые примеры из документации:
-- [API.md - Примеры](./API.md#-примеры-использования)
+- [API.md - Примеры](./docs/API.md#-примеры-использования)
 
 ---
 
@@ -356,7 +356,7 @@ dotnet dev-certs https --trust
 dotnet run --urls "https://localhost:7002"
 ```
 
-Больше решений см. в [SETUP.md - Решение проблем](./SETUP.md#-решение-проблем) 🔧
+Больше решений см. в [SETUP.md - Решение проблем](./docs/SETUP.md#-решение-проблем) 🔧
 
 ---
 
@@ -397,7 +397,7 @@ Logging__LogLevel__Default=Information
 }
 ```
 
-Подробнее см. [SETUP.md - Конфигурация](./SETUP.md#-конфигурация) ⚙️
+Подробнее см. [SETUP.md - Конфигурация](./docs/SETUP.md#-конфигурация) ⚙️
 
 ---
 
@@ -463,9 +463,9 @@ Infrastructure (DB, File System)
 
 ### Документация проекта
 
-- **[API.md](./API.md)** — Полное описание всех endpoints
-- **[AUTHENTICATION.md](./AUTHENTICATION.md)** — JWT аутентификация и безопасность
-- **[SETUP.md](./SETUP.md)** — Установка и конфигурация
+- **[API.md](./docs/API.md)** — Полное описание всех endpoints
+- **[AUTHENTICATION.md](./docs/AUTHENTICATION.md)** — JWT аутентификация и безопасность
+- **[SETUP.md](./docs/SETUP.md)** — Установка и конфигурация
 
 ### Официальные ресурсы
 
@@ -478,21 +478,3 @@ Infrastructure (DB, File System)
 - **Repository**: https://github.com/LibSyfer/WebStorage
 - **Issues**: https://github.com/LibSyfer/WebStorage/issues
 - **Discussions**: https://github.com/LibSyfer/WebStorage/discussions
-
----
-
-## 📞 Контакты и поддержка
-
-- 📧 Email: support@webstorage.local
-- 🐛 Issues: Используйте [GitHub Issues](https://github.com/LibSyfer/WebStorage/issues)
-- 💬 Discussions: Используйте [GitHub Discussions](https://github.com/LibSyfer/WebStorage/discussions)
-
----
-
-## 🙏 Благодарности
-
-Спасибо всем контрибьюторам и пользователям за поддержку проекта!
-
----
-
-**Создано с ❤️ на ASP.NET Core 10**
