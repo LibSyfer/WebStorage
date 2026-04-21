@@ -21,8 +21,6 @@ public sealed class AuthController(
     public async Task<ActionResult<AuthResponse>> Register([FromBody] RegisterRequest request, CancellationToken cancellationToken)
     {
         var result = await authService.RegisterAsync(request, cancellationToken);
-        if (result is null)
-            return Conflict();
 
         SetRefreshCookie(result.RefreshToken, result.SessionExpiresAtUtc);
 
@@ -33,8 +31,6 @@ public sealed class AuthController(
     public async Task<ActionResult<AuthResponse>> Login([FromBody] LoginRequest request, CancellationToken cancellationToken)
     {
         var result = await authService.LoginAsync(request, cancellationToken);
-        if (result is null)
-            return Unauthorized();
 
         SetRefreshCookie(result.RefreshToken, result.SessionExpiresAtUtc);
 
@@ -44,19 +40,21 @@ public sealed class AuthController(
     [HttpPost("refresh")]
     public async Task<ActionResult<AuthResponse>> Refresh(CancellationToken cancellationToken)
     {
-        if (!Request.Cookies.TryGetValue(_authSessionOptions.CookieName, out var refreshToken))
-            return Unauthorized();
+        if (!Request.Cookies.TryGetValue(_authSessionOptions.CookieName, out var refreshToken) ||
+            string.IsNullOrWhiteSpace(refreshToken))
+            throw new RefreshTokenMissingException();
 
-        var result = await authService.RefreshAsync(refreshToken, cancellationToken);
-        if (result is null)
+        try
+        {
+            var result = await authService.RefreshAsync(refreshToken, cancellationToken);
+            SetRefreshCookie(result.RefreshToken, result.SessionExpiresAtUtc);
+            return Ok(result.Auth);
+        }
+        catch (InvalidRefreshTokenException)
         {
             ClearRefreshCookie();
-            return Unauthorized();
+            throw;
         }
-
-        SetRefreshCookie(result.RefreshToken, result.SessionExpiresAtUtc);
-
-        return Ok(result.Auth);
     }
 
     [HttpPost("logout")]
